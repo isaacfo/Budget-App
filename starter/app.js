@@ -114,7 +114,8 @@ var UIController = (function() {
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
-        percentageLabel: '.budget__expenses--percentage'
+        percentageLabel: '.budget__expenses--percentage',
+        container: '.container'
     }
 
     return {
@@ -134,15 +135,15 @@ var UIController = (function() {
 
             if(type === 'inc') {
                 element = DOMstrings.incomeContainer;
-                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             } else if (type === 'exp') {
                 element = DOMstrings.expenseContainer
-                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             }
             
 
             
-            // Replace the placejplder text with some actual data
+            // Replace the placehplder text with some actual data
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%description%', obj.description);
             newHtml = newHtml.replace('%value%', obj.value);
@@ -206,8 +207,11 @@ var controller = (function(budgetCtrl, UICtrl) {
                 ctrlAddItem();
             }
     
-        }) 
-    }
+        });
+
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+    };
 
     var DOM = UICtrl.getDOMstrings();
 
@@ -227,9 +231,7 @@ var controller = (function(budgetCtrl, UICtrl) {
     var ctrlAddItem = function() {
         var input, newItem;
     
-
-    
-       // 1. Get the field input data
+        // 1. Get the field input data
        var input = UICtrl.getInput();
       
        if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
@@ -248,8 +250,28 @@ var controller = (function(budgetCtrl, UICtrl) {
       updateBudget();
     }
 
-
 };
+
+    var ctrlDeleteItem = function(event) {
+        var itemID, splitID, type, ID;
+        
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+        if(itemID) {
+
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = splitID[1];
+
+            // 1. Delete the item from the data structure
+
+            // 2. Delete the item from the UI
+
+            // 3. Update and show the new budget  
+
+
+        }
+}
 
    return {
        init: function() {
